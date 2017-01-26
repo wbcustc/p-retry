@@ -28,7 +28,8 @@ module.exports = (input, opts) => new Promise((resolve, reject) => {
 				if (err instanceof AbortError) {
 					operation.stop();
 					reject(err.originalError);
-				} else if (err instanceof TypeError) {
+				} else if (err.isBoom || err instanceof TypeError) {
+                    // Don't retry when it's a hapi boom error
 					operation.stop();
 					reject(err);
 				} else if (!operation.retry(err)) {
